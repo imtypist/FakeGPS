@@ -33,6 +33,8 @@ public class JoyStickManager implements IJoyStickPresenter {
     private LocPoint mTargetLocPoint;
     private int mFlyTime;
     private int mFlyTimeIndex;
+    private double deltaLatitude;
+    private double deltaLongitude;
     private boolean mIsFlyMode = false;
 
     private JoyStickView mJoyStickView;
@@ -98,9 +100,8 @@ public class JoyStickManager implements IJoyStickPresenter {
         if (!mIsFlyMode || mFlyTimeIndex > mFlyTime) {
             return mCurrentLocPoint;
         } else {
-            float factor = (float) mFlyTimeIndex / (float) mFlyTime;
-            double lat = mCurrentLocPoint.getLatitude() + (factor * (mTargetLocPoint.getLatitude() - mCurrentLocPoint.getLatitude()));
-            double lon = mCurrentLocPoint.getLongitude() + (factor * (mTargetLocPoint.getLatitude() - mCurrentLocPoint.getLatitude()));
+            double lat = mCurrentLocPoint.getLatitude() + deltaLatitude / mFlyTime;
+            double lon = mCurrentLocPoint.getLongitude() + deltaLongitude / mFlyTime;
             mCurrentLocPoint.setLatitude(lat);
             mCurrentLocPoint.setLongitude(lon);
             mFlyTimeIndex++;
@@ -118,6 +119,44 @@ public class JoyStickManager implements IJoyStickPresenter {
         mFlyTime = flyTime;
         mFlyTimeIndex = 0;
         mIsFlyMode = true;
+        deltaLatitude = mTargetLocPoint.getLatitude() - mCurrentLocPoint.getLatitude();
+        deltaLongitude = mTargetLocPoint.getLongitude() - mCurrentLocPoint.getLongitude();
+        mCurrentLocPoint.setBearing(calBearing(mCurrentLocPoint, mTargetLocPoint));
+    }
+
+    public void flyToLocation(@NonNull LocPoint[] location, int[] flyTime) throws InterruptedException {
+        int length = location.length;
+        for(int i = 0;i < length;i++){
+            mTargetLocPoint = location[i];
+            mFlyTime = flyTime[i];
+            mFlyTimeIndex = 0;
+            mIsFlyMode = true;
+            deltaLatitude = mTargetLocPoint.getLatitude() - mCurrentLocPoint.getLatitude();
+            deltaLongitude = mTargetLocPoint.getLongitude() - mCurrentLocPoint.getLongitude();
+            mCurrentLocPoint.setBearing(calBearing(mCurrentLocPoint, mTargetLocPoint));
+            while(true){
+                if(mFlyTimeIndex > mFlyTime){
+                    break;
+                }
+                Thread.currentThread().sleep(1000);
+            }
+        }
+    }
+
+    private float calBearing(LocPoint st, LocPoint ed){
+        double x = ed.getLatitude() - st.getLatitude();
+        double y = ed.getLongitude() - st.getLongitude();
+        float angle = 0;
+        if(y != 0){
+            angle = (float)(Math.atan(x/y)/Math.PI*180);
+        }else{
+            if(x > 0){
+                angle = 90;
+            }else if(x < 0){
+                angle = 270;
+            }
+        }
+        return angle;
     }
 
     public boolean isFlyMode() {

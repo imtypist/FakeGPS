@@ -109,11 +109,12 @@ public class LocationThread extends HandlerThread {
             try {
                 location.setLatitude(locPoint.getLatitude());
                 location.setLongitude(locPoint.getLongitude());
-                location.setAltitude(50);
+                location.setBearing(locPoint.getBearing());
+                location.setAltitude(20);
                 if (Build.VERSION.SDK_INT > 16) {
                     location.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
                 }
-                location.setAccuracy(10);
+                location.setAccuracy(1);
                 if (mLastLocPoint.getLatitude() != locPoint.getLatitude()
                         || mLastLocPoint.getLongitude() != locPoint.getLongitude()) {
                     mLastLocPoint.setLatitude(locPoint.getLatitude());

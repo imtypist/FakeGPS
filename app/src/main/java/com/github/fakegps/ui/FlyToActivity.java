@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -32,10 +33,9 @@ import com.tencent.fakegps.R;
 import java.util.ArrayList;
 
 public class FlyToActivity extends AppCompatActivity implements View.OnClickListener {
-    //    private final double LAT_DEFAULT = 37.802406;
-//    private final double LON_DEFAULT = -122.401779;
-    private final double LAT_DEFAULT = 23.151637;
-    private final double LON_DEFAULT = 113.344721;
+
+    private final double LAT_DEFAULT = 31.01931579;
+    private final double LON_DEFAULT = 121.42645532;
 
     private final int FLY_TIME_DEFAULT = 60;
 
@@ -83,8 +83,9 @@ public class FlyToActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        int flyTime = FakeGpsUtils.getIntValueFromInput(this, mFlyTimeEditText);
-        LocPoint point = FakeGpsUtils.getLocPointFromInput(this, mLocEditText);
+        final int flyTime[] = FakeGpsUtils.getIntValuesFromInput(this, mFlyTimeEditText);
+        // NOTICE this function get points array
+        final LocPoint[] point = FakeGpsUtils.getLocPointsFromInput(this, mLocEditText);
 
         switch (view.getId()) {
 
@@ -93,8 +94,19 @@ public class FlyToActivity extends AppCompatActivity implements View.OnClickList
                     if (JoyStickManager.get().isFlyMode()) {
                         JoyStickManager.get().stopFlyMode();
                     } else {
-                        if (point != null && flyTime > 0) {
-                            JoyStickManager.get().flyToLocation(point, flyTime);
+                        if (point != null && flyTime.length == point.length) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Looper.prepare();
+                                    try {
+                                        JoyStickManager.get().flyToLocation(point, flyTime);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Looper.loop();
+                                }
+                            }).start();
                         } else {
                             Toast.makeText(this, "Input is not valid!", Toast.LENGTH_SHORT).show();
                         }

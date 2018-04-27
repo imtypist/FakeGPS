@@ -10,10 +10,12 @@ public class LocPoint implements Serializable {
 
     private double mLatitude;
     private double mLongitude;
+    private float mBearing;
 
     public LocPoint(LocPoint locPoint) {
         mLatitude = locPoint.getLatitude();
         mLongitude = locPoint.getLongitude();
+        mBearing = locPoint.getBearing();
     }
 
     public LocPoint(double latitude, double longitude) {
@@ -29,6 +31,8 @@ public class LocPoint implements Serializable {
         return mLongitude;
     }
 
+    public float getBearing() { return mBearing; }
+
     public void setLatitude(double latitude) {
         mLatitude = latitude;
     }
@@ -36,6 +40,8 @@ public class LocPoint implements Serializable {
     public void setLongitude(double longitude) {
         mLongitude = longitude;
     }
+
+    public void setBearing(float bearing) { mBearing = bearing; }
 
     @Override
     public String toString() {

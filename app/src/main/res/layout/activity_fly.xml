@@ -47,13 +47,13 @@
             android:layout_height="wrap_content"
             android:text="@string/fly_time"
             android:textSize="16sp"/>
+
         <EditText
             android:id="@+id/inputFlyTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/fly_time"
-            android:inputType="numberDecimal"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
     </LinearLayout>
 

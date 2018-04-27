@@ -2,7 +2,8 @@
 
 ### ChangeLog
 - 原仓库使用的是`Android Studio 2.x`版本，更新配置文件到`Android Studio 3.1`版本
-- // TODO: 修改Flight Mode功能
+- 修改Flight Mode功能，可输入经纬度坐标轨迹，按轨迹匀速前进（原来的前进方式是ease-in），并修正了原项目的经纬度插值错误
+- // TODO: Fix->Bearing计算方式有误
 
 ### Notice
 仓库fork自[@xiangtailiang/FakeGPS](https://github.com/xiangtailiang/FakeGPS)，以及这种解决方案只能在可以关掉GPS Provider的安卓模拟器（比如Genymotion）以及GPS信号很差的地方（比如室内）才能生效，否则地点会跳来跳去，原因可以参考这个[issue#10](https://github.com/xiangtailiang/FakeGPS/issues/10):smile:
