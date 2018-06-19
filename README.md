@@ -2,7 +2,7 @@
 
 ### ChangeLog
 - 原仓库使用的是`Android Studio 2.x`版本，更新配置文件到`Android Studio 3.1`版本
-- 修改Flight Mode功能，可输入经纬度坐标轨迹，按轨迹匀速前进（原来的前进方式是ease-in），并修正了原项目的经纬度插值错误
+- 修改Flight Mode功能，可输入经纬度坐标轨迹，按轨迹匀速前进（原来的前进方式是ease-in），并修正了原项目的经纬度插值错误[Pull request#12](https://github.com/xiangtailiang/FakeGPS/pull/12)
 - // TODO: Fix->Bearing计算方式有误
 
 ### Notice
